@@ -3,7 +3,7 @@ namespace SpriteKind {
     //% isKind
     export const Bubble = SpriteKind.create()
 }
-tiles.setCurrentTilemap(tilemap`level0`)
+tiles.setCurrentTilemap(tilemap`level2`)
 
 
 //% color=#32c4de icon="\uf192"
@@ -705,9 +705,4 @@ if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
     createBoard()
 }
 
-    } else {
-        music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
-        game.showLongText("You cleared all levels!", DialogLayout.Center)
-        game.over(true)
-    }
-}
+    

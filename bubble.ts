@@ -700,9 +700,10 @@ namespace bubble {
     }
 
     // ✅ Add this section here
-    if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
-        level++
-        game.splash("Level " + level + "!")
-        createBoard()
-    }
+   if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
+    level++
+    music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+    game.showLongText("Level " + level + "!", DialogLayout.Center)
+    pause(1000)
+    createBoard()
 }

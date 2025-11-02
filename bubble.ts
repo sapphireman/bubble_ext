@@ -641,11 +641,12 @@ namespace bubble {
 
     // Each level adds one more row
     for (let x = 0; x <= 17; x++) {
-        for (let y = 0; y <= 1 + (level - 1); y++) {
-            tiles.setWallAt(tiles.getTileLocation(x + 1, y + 1), true)
-            tiles.setTileAt(tiles.getTileLocation(x + 1, y + 1), bubble.list[randint(0, bubble.list.length - 1)])
-        }
+    for (let y = 0; y <= 1 + (level - 1); y++) {
+        tiles.setWallAt(tiles.getTileLocation(x + 1, y + 1), true)
+        tiles.setTileAt(tiles.getTileLocation(x + 1, y + 1), bubble.list._pickRandom())
     }
+}
+
 
     controller.configureRepeatEventDefaults(0, 30)
     ShotNumber = 0
@@ -663,7 +664,7 @@ namespace bubble {
     //% location.shadow=variables_get
     //% location.defl=location
     export function stick_to_wall(sprite: Sprite, location: tiles.Location) {
-    stateTransitions.changeState("checking")
+    stateTransitions.changeState("aiming")
     if (!(tiles.tileAtLocationEquals(location, assets.tile`myTile`))) {
         if (tiles.tileAtLocationEquals(location, assets.tile`bottom_row`)) {
             sprites.destroy(sprite)
@@ -698,11 +699,12 @@ namespace bubble {
     }
 if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
     level++
-    if (level <= 3) {
-        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
-        game.showLongText("Level " + level + "!", DialogLayout.Center)
-        pause(1000)
-        createBoard()
+    music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+    game.showLongText("Level " + level + "!", DialogLayout.Center)
+    pause(1000)
+    createBoard()
+}
+
     } else {
         music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
         game.showLongText("You cleared all levels!", DialogLayout.Center)

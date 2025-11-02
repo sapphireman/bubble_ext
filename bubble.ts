@@ -697,10 +697,9 @@ namespace bubble {
         }
     }
 if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
-    timer.after(200, function() { // wait 0.2 seconds before changing level
-        level++
-        if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
-    level++
+    timer.after(200, function() { 
+        level++  
+        
     if (level <= 3) {
         music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
         game.showLongText("Level " + level + "!", DialogLayout.Center)

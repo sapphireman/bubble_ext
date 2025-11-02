@@ -1,3 +1,4 @@
+let level = 1
 namespace SpriteKind {
     //% isKind
     export const Bubble = SpriteKind.create()
@@ -640,7 +641,7 @@ namespace bubble {
         ]
         aimingAngle = -90
         for (let indexX2 = 0; indexX2 <= 17; indexX2++) {
-            for (let indexY2 = 0; indexY2 <= 1; indexY2++) {
+            for (let indexY2 = 0; indexY2 <= 1 + (level - 1); indexY2++)
                 if (bubble.list.length > 0) {
                     tiles.setWallAt(tiles.getTileLocation(indexX2 + 1, indexY2 + 1), true)
                     tiles.setTileAt(tiles.getTileLocation(indexX2 + 1, indexY2 + 1), bubble.list._pickRandom())
@@ -664,34 +665,44 @@ namespace bubble {
     //% location.shadow=variables_get
     //% location.defl=location
     export function stick_to_wall(sprite: Sprite, location: tiles.Location) {
-        stateTransitions.changeState("checking")
-        if (!(tiles.tileAtLocationEquals(location, assets.tile`myTile`))) {
-            if (tiles.tileAtLocationEquals(location, assets.tile`bottom_row`)) {
-                sprites.destroy(sprite)
-                info.changeScoreBy(-1)
-            } else if (tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Bottom)) || tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Right)) || tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Top)) || tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Left))) {
-                sprite.setVelocity(0, 0)
-                checkForMatches(sprite)
-            } else {
-                sprite.setVelocity(0, 0)
-                sprite.y += -8
-                checkForMatches(sprite)
-            }
+    stateTransitions.changeState("checking")
+    if (!(tiles.tileAtLocationEquals(location, assets.tile`myTile`))) {
+        if (tiles.tileAtLocationEquals(location, assets.tile`bottom_row`)) {
+            sprites.destroy(sprite)
+            info.changeScoreBy(-1)
+        } else if (
+            tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Bottom)) ||
+            tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Right)) ||
+            tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Top)) ||
+            tiles.tileAtLocationIsWall(sprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Left))
+        ) {
+            sprite.setVelocity(0, 0)
+            checkForMatches(sprite)
         } else {
-            if (sprite.isHittingTile(CollisionDirection.Left)) {
-                sprites.setDataNumber(myBall, "vx", Math.abs(sprites.readDataNumber(sprite, "vx")))
-            }
-            if (sprite.isHittingTile(CollisionDirection.Right)) {
-                sprites.setDataNumber(myBall, "vx", 0 - Math.abs(sprites.readDataNumber(sprite, "vx")))
-            }
-            if (sprite.isHittingTile(CollisionDirection.Top)) {
-                sprite.setVelocity(0, 0)
-                checkForMatches(sprite)
-            }
-            if (sprite.isHittingTile(CollisionDirection.Bottom)) {
-                sprites.setDataNumber(myBall, "vy", 0 - Math.abs(sprites.readDataNumber(sprite, "vy")))
-            }
+            sprite.setVelocity(0, 0)
+            sprite.y += -8
+            checkForMatches(sprite)
+        }
+    } else {
+        if (sprite.isHittingTile(CollisionDirection.Left)) {
+            sprites.setDataNumber(myBall, "vx", Math.abs(sprites.readDataNumber(sprite, "vx")))
+        }
+        if (sprite.isHittingTile(CollisionDirection.Right)) {
+            sprites.setDataNumber(myBall, "vx", 0 - Math.abs(sprites.readDataNumber(sprite, "vx")))
+        }
+        if (sprite.isHittingTile(CollisionDirection.Top)) {
+            sprite.setVelocity(0, 0)
+            checkForMatches(sprite)
+        }
+        if (sprite.isHittingTile(CollisionDirection.Bottom)) {
+            sprites.setDataNumber(myBall, "vy", 0 - Math.abs(sprites.readDataNumber(sprite, "vy")))
         }
     }
 
+    // ✅ Add this section here
+    if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
+        level++
+        game.splash("Level " + level + "!")
+        createBoard()
+    }
 }

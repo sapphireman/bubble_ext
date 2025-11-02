@@ -699,16 +699,20 @@ namespace bubble {
 if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
     timer.after(200, function() { // wait 0.2 seconds before changing level
         level++
-        if (level <= 3) {
-            music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
-            game.showLongText("Level " + level + "!", DialogLayout.Center)
-            pause(1000)
-            createBoard()
-        } else {
-            game.over(true)
-        }
-    })
+        if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
+    level++
+    if (level <= 3) {
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+        game.showLongText("Level " + level + "!", DialogLayout.Center)
+        pause(1000)
+        createBoard()
+    } else {
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+        game.showLongText("You win!", DialogLayout.Center)
+        game.gameOver(true)
+    }
 }
+
 
 
     

@@ -631,23 +631,28 @@ namespace bubble {
     //% block="create board"
     //% help=bubble/create_board
     export function createBoard() {
-        tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level0`))
-        bubble.list = [
-            assets.tile`myTile1`,
-            assets.tile`myTile2`,
-            assets.tile`myTile3`,
-            assets.tile`myTile4`,
-            assets.tile`myTile5`
-        ]
-        aimingAngle = -90
-        for (let indexX2 = 0; indexX2 <= 17; indexX2++) {
-            for (let indexY2 = 0; indexY2 <= 1 + (level - 1); indexY2++)
-                if (bubble.list.length > 0) {
-                    tiles.setWallAt(tiles.getTileLocation(indexX2 + 1, indexY2 + 1), true)
-                    tiles.setTileAt(tiles.getTileLocation(indexX2 + 1, indexY2 + 1), bubble.list._pickRandom())
-                }
-            }
+    tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level0`))
+    bubble.list = [
+        assets.tile`myTile1`,
+        assets.tile`myTile2`,
+        assets.tile`myTile3`,
+        assets.tile`myTile4`,
+        assets.tile`myTile5`
+    ]
+    aimingAngle = -90
+
+    // Each level adds one more row
+    for (let x = 0; x <= 17; x++) {
+        for (let y = 0; y <= 1 + (level - 1); y++) {
+            tiles.setWallAt(tiles.getTileLocation(x + 1, y + 1), true)
+            tiles.setTileAt(tiles.getTileLocation(x + 1, y + 1), bubble.list._pickRandom())
         }
+    }
+
+    controller.configureRepeatEventDefaults(0, 30)
+    ShotNumber = 0
+    stateTransitions.changeState("aiming")
+}
         controller.configureRepeatEventDefaults(0, 30)
         ShotNumber = 0
         stateTransitions.changeState("aiming")
@@ -698,12 +703,16 @@ namespace bubble {
             sprites.setDataNumber(myBall, "vy", 0 - Math.abs(sprites.readDataNumber(sprite, "vy")))
         }
     }
-
-    // ✅ Add this section here
-   if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
+if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
     level++
-    music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
-    game.showLongText("Level " + level + "!", DialogLayout.Center)
-    pause(1000)
-    createBoard()
+    if (level <= 3) {
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+        game.showLongText("Level " + level + "!", DialogLayout.Center)
+        pause(1000)
+        createBoard()
+    } else {
+        music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
+        game.showLongText("You cleared all levels!", DialogLayout.Center)
+        game.over(true)
+    }
 }

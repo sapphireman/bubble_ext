@@ -639,7 +639,6 @@ namespace bubble {
     ]
     aimingAngle = -90
 
-    // Each level adds one more row
     for (let x = 0; x <= 17; x++) {
     for (let y = 0; y <= 1 + (level - 1); y++) {
         tiles.setWallAt(tiles.getTileLocation(x + 1, y + 1), true)
@@ -698,11 +697,18 @@ namespace bubble {
         }
     }
 if (sprites.allOfKind(SpriteKind.Bubble).length == 0) {
-    level++
-    music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
-    game.showLongText("Level " + level + "!", DialogLayout.Center)
-    pause(1000)
-    createBoard()
+    timer.after(200, function() { // wait 0.2 seconds before changing level
+        level++
+        if (level <= 3) {
+            music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+            game.showLongText("Level " + level + "!", DialogLayout.Center)
+            pause(1000)
+            createBoard()
+        } else {
+            game.over(true)
+        }
+    })
 }
+
 
     

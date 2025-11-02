@@ -604,15 +604,12 @@ namespace bubble {
     //% blockId=loadBubble 
     //% block="load new bubble"
     //% help=bubble/load_bubble
-    export function load_bubble() {
-        pauseUntil(() => stateTransitions.stateIs("aiming"))
-        if (totalBallsOut < 8) {
-            for (let value4 of bubble.list) {
-                if (tiles.getTilesByType(value4).length == 0 && bubble.list.indexOf(value4) >= 0) {
-                    bubble.list.removeAt(bubble.list.indexOf(value4))
-                } else if (tiles.getTilesByType(value4).length > 0 && bubble.list.indexOf(value4) < 0) {
-                    bubble.list.push(value4)
-                }
+   export function load_bubble() {
+    pauseUntil(() => stateTransitions.stateIs("aiming"))
+    if (totalBallsOut < 8) {
+        for (let value4 of bubble.list) {
+            if (tiles.getTilesByType(value4).length == 0 && bubble.list.indexOf(value4) >= 0) {
+                bubble.list.removeAt(bubble.list.indexOf(value4))
             }
         }
         codingThisBall = randint(0, bubble.list.length - 1)
@@ -620,8 +617,9 @@ namespace bubble {
         myBall = sprites.create(bubble.list[codingThisBall], SpriteKind.Bubble)
         myBall.x = 80
         myBall.bottom = 102
-
     }
+}
+
 
 
     /**
@@ -645,7 +643,7 @@ namespace bubble {
     for (let x = 0; x <= 17; x++) {
         for (let y = 0; y <= 1 + (level - 1); y++) {
             tiles.setWallAt(tiles.getTileLocation(x + 1, y + 1), true)
-            tiles.setTileAt(tiles.getTileLocation(x + 1, y + 1), bubble.list._pickRandom())
+            tiles.setTileAt(tiles.getTileLocation(x + 1, y + 1), bubble.list[randint(0, bubble.list.length - 1)])
         }
     }
 
@@ -653,11 +651,6 @@ namespace bubble {
     ShotNumber = 0
     stateTransitions.changeState("aiming")
 }
-        controller.configureRepeatEventDefaults(0, 30)
-        ShotNumber = 0
-        stateTransitions.changeState("aiming")
-    }
-
 
     /**
     * Decides where the bubble should stick
